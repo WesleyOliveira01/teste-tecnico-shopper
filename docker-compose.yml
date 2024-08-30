@@ -1,0 +1,22 @@
+services:
+  measures-db:
+    image: postgres:latest
+    container_name: measures-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=measures
+    ports:
+      - 5432:5432
+
+  web-api:
+    build:
+      context: .
+    container_name: measures-api
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@measures-db:5432/measures
+    depends_on:
+      - measures-db
+    command: sh -c "npx prisma migrate deploy && npm start"

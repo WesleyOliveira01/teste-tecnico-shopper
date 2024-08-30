@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MeasureType {
+  WATER
+  GAS
+}
+
+model Measure {
+  id             String      @id @default(uuid()) @map("measure_uuid")
+  customerCode   String
+  measureDate    DateTime
+  measureType    MeasureType
+  value          Int?
+  imageUrl       String?
+  isConfirmed    Boolean?     @default(false)
+
+  @@map("measures")
+}
